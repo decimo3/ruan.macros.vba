@@ -1,253 +1,148 @@
-Attribute VB_Name = "MÛdulo1"
+Attribute VB_Name = "M√≥dulo1"
 Sub Gdis_ROBO()
 
-
 Dim driver As WebDriver
-    Dim lUltimaLinhaAtiva   As Long
-    Dim lContador           As Long
+Dim lUltimaLinhaAtiva   As Long
+Dim lContador           As Long
 
-
-'SHEETS(ABA)_______________________________________________________________________________________________________________________
+'CONTADOR DE LINHAS________________________________________________________________________________________________________________________________________________
 Sheets("GDIS").Select
-
-
 lUltimaLinhaAtiva = Worksheets("GDIS").Cells(Worksheets("GDIS").Rows.Count, 2).End(xlUp).Row
+UserForm1.TextBox4 = lUltimaLinhaAtiva - 1
+HoraAtual = TimeValue(Now)
 
-'Range("N2:AA2").Select
-'    Selection.Copy
-'    Range("n2:AA" & lUltimaLinhaAtiva).Select
- '     ActiveSheet.Paste
+'INICIAR CHROME______________________________________________________________________________________________________________________
+Set driver = New selenium.ChromeDriver
 
-Set driver = New selenium.ChromeDriver 'PhantomJSDriver 'ChromeDriver
-
-
-'PRIMEIRA P¡GINA__________________________________________________________________________________________________________________
-
+'PRIMEIRA P√ÅGINA__________________________________________________________________________________________________________________
 driver.Get "https://gdis/gdis-gs-web/despacho/servico/andamento/create?numserv=" & "00000000" & "&idDespachanteFiltro=4400"
 
 'LOGIN_____________________________________________________________________________________________________________________________
 driver.FindElementByXPath("//*[@id='username']").SendKeys UserForm1.TextBox1
 
-'SendKeys "4008576"
-
 'SENHA______________________________________________________________________________________________________________________________
 driver.FindElementByXPath("//*[@id='password']").SendKeys UserForm1.TextBox2
-'SendKeys "GJtF0%pu"
 
-'BOT√O DE ACIONAMENTO (SUBMIT)______________________________________________________________________________________________________
+'BOT√ÉO DE ACIONAMENTO (SUBMIT)______________________________________________________________________________________________________
 driver.FindElementByXPath("//*[@id='fm1']/input[4]").Click
 
-UserForm1.TextBox4 = lUltimaLinhaAtiva - 1
-
-HoraAtual = TimeValue(Now)
-
-
-'CONTADOR DE LINHAS, PONTO DE INICIO DA REPETI«√O____________________________________________________________________________________
+'PONTO DE INICIO DA REPETI√á√ÉO__________________________________________________________________________________________________________________
 For lContador = 2 To lUltimaLinhaAtiva
-
-Range("g" & lContador).Select
-UserForm1.TextBox3 = lContador - 1
-
-UserForm1.TextBox5.Text = Format(TimeValue(Now) - HoraAtual, "hh:mm:ss")
-
-'Range("g" & lContador).Select
-On Error GoTo 0
-
-If Range("g" & lContador) = "" Then
-
-driver.Get "https://gdis/gdis-gs-web/ordemservico/detalhe_os?numeroServico=" & Range("f" & lContador)
-If driver.FindElementByXPath("//*[@id='btnSituacaoServico']").Text = "Pendente" Then
-
-'CARRINHO PENDENTE DE FINALIZA«√O(DIRECT LINK)_________________________________________________________________________________________
-
-
-Range("N" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M S($L:$L)>9;""0"";""00"")&M S($L:$L)&""0""&ANO($L:$L)&SE(HORA(M:M)>9;""0"";""00"")&HORA(M:M)&"":""&SE(MINUTO(M:M)>9;"""";""0"")&MINUTO(M:M)&"":""&SE(SEGUNDO(M:M)>9;"""";""0"")&SEGUNDO(M:M)"
-Range("O" & lContador).FormulaLocal = "=$M:$M-(""03:00:00"")"
-Range("P" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M S($L:$L)>9;""0"";""00"")&M S($L:$L)&""0""&ANO($L:$L)&SE(HORA(O:O)>9;""0"";""00"")&HORA(O:O)&"":""&SE(MINUTO(O:O)>9;"""";""0"")&MINUTO(O:O)&"":""&SE(SEGUNDO(O:O)>9;"""";""0"")&SEGUNDO(O:O)"
-Range("Q" & lContador).FormulaLocal = "=$M:$M-(""02:00:00"")"
-Range("R" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M S($L:$L)>9;""0"";""00"")&M S($L:$L)&""0""&ANO($L:$L)&SE(HORA(Q:Q)>9;""0"";""00"")&HORA(Q:Q)&"":""&SE(MINUTO(Q:Q)>9;"""";""0"")&MINUTO(Q:Q)&"":""&SE(SEGUNDO(Q:Q)>9;"""";""0"")&SEGUNDO(Q:Q)"
-Range("S" & lContador).FormulaLocal = "=$M:$M-(""01:00:00"")"
-Range("T" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M S($L:$L)>9;""0"";""00"")&M S($L:$L)&""0""&ANO($L:$L)&SE(HORA(S:S)>9;""0"";""00"")&HORA(S:S)&"":""&SE(MINUTO(S:S)>9;"""";""0"")&MINUTO(S:S)&"":""&SE(SEGUNDO(S:S)>9;"""";""0"")&SEGUNDO(S:S)"
-Range("U" & lContador).FormulaLocal = "=$M:$M-(""00:30:00"")"
-Range("V" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M S($L:$L)>9;""0"";""00"")&M S($L:$L)&""0""&ANO($L:$L)&SE(HORA(U:U)>9;""0"";""00"")&HORA(U:U)&"":""&SE(MINUTO(U:U)>9;"""";""0"")&MINUTO(U:U)&"":""&SE(SEGUNDO(U:U)>9;"""";""0"")&SEGUNDO(U:U)"
-Range("X" & lContador).FormulaLocal = "=ESQUERDA(H:H;4)"
-Range("W" & lContador).FormulaLocal = "=SUBSTITUIR(X:X;""."";"""")"
-Range("Z" & lContador).FormulaLocal = "=$M:$M-(""00:00:00"")"
-Range("AA" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M S($L:$L)>9;""0"";""00"")&M S($L:$L)&""0""&ANO($L:$L)&SE(HORA(Z:Z)>9;""0"";""00"")&HORA(Z:Z)&"":""&SE(MINUTO(Z:Z)>9;"""";""0"")&MINUTO(Z:Z)&"":""&SE(SEGUNDO(Z:Z)>9;"""";""0"")&SEGUNDO(Z:Z)"
-
-
-
-Range("N" & lContador & ":" & "AA" & lContador).Select
-Selection.Copy
-    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
-        :=False, Transpose:=False
-
-
-
-
-
-driver.Get "https://gdis/gdis-gs-web/despacho/servico/andamento/create?numserv=" & Range("f" & lContador) & "&idDespachanteFiltro=4400"
-
-On Error Resume Next
-
-driver.FindElementByXPath("//*[@id='detalhesErroSpan']").Click
-
-If Err.Number = "7" Then
-
-
-On Error GoTo 0
-On Error Resume Next
-
-'CARRO_______________________________________________________________________________
-driver.FindElementByXPath("//*[@id='formFechamento']/div[1]/div/div[2]/div/div[1]/div/div/button").Click
-driver.FindElementByXPath("//*[@id='formFechamento']/div[1]/div/div[2]/div/div[1]/div/div/div/div/input").SendKeys Range("b" & lContador)
-driver.FindElementByXPath("//*[@id='formFechamento']/div[1]/div/div[2]/div/div[1]/div/div/div/ul").Click
-
-'MARCA«√O DE VIA VOZ____________________________________________________________________________________________________________________
-driver.FindElementByXPath("//*[@id='viaVoz1']").Click
-sng = Timer
-Do While sng + 3 > Timer
-Loop
-'DESIGNA«√O_____________________________________________________________________________________________________________________________
-
-driver.FindElementByXPath("//*[@id='servicoFTO.dhDesigna']").SendKeys Range("P" & lContador)
-driver.FindElementByXPath("//*[@id='btnDesignar']").Click
-sng = Timer
-Do While sng + 3 > Timer
-Loop
-'ACIONAMENTO____________________________________________________________________________________________________________________________
-driver.FindElementByXPath("//*[@id='servicoFTO.dhAciona']").SendKeys Range("R" & lContador)
-driver.FindElementByXPath("//*[@id='btnAcionar']/i").Click
-sng = Timer
-Do While sng + 3 > Timer
-Loop
-'LOCALIZA«√O_____________________________________________________________________________________________________________________________
-driver.FindElementByXPath("//*[@id='servicoFTO.dhLocali']").Clear
-sng = Timer
-Do While sng + 3 > Timer
-Loop
-driver.FindElementByXPath("//*[@id='servicoFTO.dhLocali']").SendKeys Range("T" & lContador)
-driver.FindElementByXPath("//*[@id='btnLocalizar']/i").Click
-sng = Timer
-Do While sng + 3 > Timer
-Loop
-'PREVIS√O________________________________________________________________________________________________________________________________
-driver.FindElementByXPath("//*[@id='servicoFTO.dhTerprev']").Clear
-driver.FindElementByXPath("//*[@id='servicoFTO.dhTerprev']").SendKeys Range("V" & lContador)
-driver.FindElementByXPath("//*[@id='dataAndamentoServico']/div/div[5]/div/dl/dd/div/div/button/i").Click
-sng = Timer
-Do While sng + 3 > Timer
-Loop
-
-'TERMINO REAL________________________________________________________________________________________________________________________________
-driver.FindElementByXPath("//*[@id='servicoFTO.dhTerreal']").Clear
-
-driver.FindElementByXPath("//*[@id='servicoFTO.dhTerreal']").SendKeys Range("AA" & lContador)
-'driver.FindElementByXPath("//*[@id='btnAcionarFinalizacao']/i").Click
-
-'//*[@id="dataAndamentoServico"]/div/div[5]/div/dl/dd/div/div/button/i
-
-'//*[@id="servicoFTO.dhTerreal"]
-'//*[@id="btnAcionarFinalizacao"]/i
-
-On Error GoTo 0
-
-
-
-'CODIGO___________________________________________________________________________________________________________________________________
-driver.FindElementByXPath("//*[@id='findCodFech']").SendKeys Range("X" & lContador)
-
-
-
-
-driver.FindElementByXPath("//*[@id='" & Range("W" & lContador) & "']").Click
-'MATERIAL UTILIZADO________________________________________________________________________________________________________________________
-On Error Resume Next
-
-driver.FindElementByXPath("//*[@id='tab-materiais_usados']/a").Click
-If Err.Number <> 7 Then
-driver.FindElementByXPath("//*[@id='link-show-equipamentos']/i").Click
-
-'TEMPORIZADOR______________________________________________________________________________________________________________________________
-sng = Timer
-Do While sng + 2 > Timer
-Loop
-
-'INICIO CONDICIONAL (VERDADEIRO)____________________________________________________________________________________________________________
-
-driver.FindElementByXPath("//*[@id='tblMateriais_filter']/label/input").SendKeys Range("j" & lContador)
-
-
-'PAGINA DE MATERIAIS UTILIZADOS______________________________________________________________________________________________________________
-driver.FindElementByXPath("//*[@id='tblMateriais']/tbody/tr[1]/td[3]/button").Click
-
-
-'# QUANT USADA (ZEREI, POIS TRATA-SE DE FINALIZA«√O DE CORTE)
-driver.FindElementByXPath("//*[@id='txt-qtdeUsado']").SendKeys 0
-
-'# QUANT RETIRADA (QUANTIDADE INFORMADA NA PLANILHA DO GFORMS)
-driver.FindElementByXPath("//*[@id='txt-qtdeRetirado']").SendKeys Range("K" & lContador).Value
-
-'# BOT√O ADICIONAR
-driver.FindElementByXPath("//*[@id='btn-adicionar']").Click
-
-Else
-End If
-
-
-
-On Error GoTo 0
-'DADOS ADICONAIS______________________________________________________________________________________________________________
-driver.FindElementByXPath("//*[@id='tab-abaDadosAdicionais']/a").Click
-
-driver.FindElementByXPath("//*[@id='txtObservacao']").SendKeys Range("C" & lContador) & " - " & Range("D" & lContador) & "; " & Range("I" & lContador)
-driver.FindElementByXPath("//*[@id='btnFinalizar']").Click
-Range("G" & lContador) = "FINALIZADA PELO ROBO, " & DateValue(Now) & "."
-
-
-
-
-
-
-
-'FIM CONDICIONAL ___________________________________________________________________________________________________________________________
-
-
-
-Else
-On Error GoTo 0
-Range("G" & lContador) = "ERRO NO NUMERO DA OS"
-
-End If
-Else
-UserForm1.TextBox3 = lContador - 1
-
-UserForm1.TextBox5.Text = Format(TimeValue(Now) - HoraAtual, "hh:mm:ss")
-Range("G" & lContador) = "N„o finalizado pelo robÙ, status consultado no GDIS: " & driver.FindElementByXPath("//*[@id='btnSituacaoServico']").Text
-End If
-Else
-End If
-'FIM DO CONTADOR (REINICIO)__________________________________________________________________________________________________________________
-
-UserForm1.TextBox5.Text = Format(TimeValue(Now) - HoraAtual, "hh:mm:ss")
-Range("g" & lContador).Select
-
-
-
-
-
-
-
-Next lContador
-
-
-'MENSAGEM DE FINALIZA«√O DO PROCESSO__________________________________________________________________________________________________________
-
+    Range("G" & lContador).Select
+    UserForm1.TextBox3 = lContador - 1
+    UserForm1.TextBox5.Text = Format(TimeValue(Now) - HoraAtual, "hh:mm:ss")
+    On Error GoTo 0 '#CHECKPOIT
+    If Range("G" & lContador) = "" Then
+        driver.Get "https://gdis/gdis-gs-web/ordemservico/detalhe_os?numeroServico=" & Range("f" & lContador)
+        If driver.FindElementByXPath("//*[@id='btnSituacaoServico']").Text = "Pendente" Then
+            'CARRINHO PENDENTE DE FINALIZA√á√ÉO(DIRECT LINK)_________________________________________________________________________________________
+            Range("N" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M√äS($L:$L)>9;""0"";""00"")&M√äS($L:$L)&""0""&ANO($L:$L)&SE(HORA(M:M)>9;""0"";""00"")&HORA(M:M)&"":""&SE(MINUTO(M:M)>9;"""";""0"")&MINUTO(M:M)&"":""&SE(SEGUNDO(M:M)>9;"""";""0"")&SEGUNDO(M:M)"
+            Range("O" & lContador).FormulaLocal = "=$M:$M-(""03:00:00"")"
+            Range("P" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M√äS($L:$L)>9;""0"";""00"")&M√äS($L:$L)&""0""&ANO($L:$L)&SE(HORA(O:O)>9;""0"";""00"")&HORA(O:O)&"":""&SE(MINUTO(O:O)>9;"""";""0"")&MINUTO(O:O)&"":""&SE(SEGUNDO(O:O)>9;"""";""0"")&SEGUNDO(O:O)"
+            Range("Q" & lContador).FormulaLocal = "=$M:$M-(""02:00:00"")"
+            Range("R" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M√äS($L:$L)>9;""0"";""00"")&M√äS($L:$L)&""0""&ANO($L:$L)&SE(HORA(Q:Q)>9;""0"";""00"")&HORA(Q:Q)&"":""&SE(MINUTO(Q:Q)>9;"""";""0"")&MINUTO(Q:Q)&"":""&SE(SEGUNDO(Q:Q)>9;"""";""0"")&SEGUNDO(Q:Q)"
+            Range("S" & lContador).FormulaLocal = "=$M:$M-(""01:00:00"")"
+            Range("T" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M√äS($L:$L)>9;""0"";""00"")&M√äS($L:$L)&""0""&ANO($L:$L)&SE(HORA(S:S)>9;""0"";""00"")&HORA(S:S)&"":""&SE(MINUTO(S:S)>9;"""";""0"")&MINUTO(S:S)&"":""&SE(SEGUNDO(S:S)>9;"""";""0"")&SEGUNDO(S:S)"
+            Range("U" & lContador).FormulaLocal = "=$M:$M-(""00:30:00"")"
+            Range("V" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M√äS($L:$L)>9;""0"";""00"")&M√äS($L:$L)&""0""&ANO($L:$L)&SE(HORA(U:U)>9;""0"";""00"")&HORA(U:U)&"":""&SE(MINUTO(U:U)>9;"""";""0"")&MINUTO(U:U)&"":""&SE(SEGUNDO(U:U)>9;"""";""0"")&SEGUNDO(U:U)"
+            Range("X" & lContador).FormulaLocal = "=ESQUERDA(H:H;4)"
+            Range("W" & lContador).FormulaLocal = "=SUBSTITUIR(X:X;""."";"""")"
+            Range("Z" & lContador).FormulaLocal = "=$M:$M-(""00:00:00"")"
+            Range("AA" & lContador).FormulaLocal = "=SE(DIA($L:$L)>9;"""";""0"")&DIA($L:$L)&SE(M√äS($L:$L)>9;""0"";""00"")&M√äS($L:$L)&""0""&ANO($L:$L)&SE(HORA(Z:Z)>9;""0"";""00"")&HORA(Z:Z)&"":""&SE(MINUTO(Z:Z)>9;"""";""0"")&MINUTO(Z:Z)&"":""&SE(SEGUNDO(Z:Z)>9;"""";""0"")&SEGUNDO(Z:Z)"
+            'TIRAR F√ìRMULA, COLAR VALORES_______________________________________________________________________________________________________________________________________________
+            Range("N" & lContador & ":" & "AA" & lContador).Select
+            Selection.Copy
+            Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks:=False, Transpose:=False
+            'INICIAR O PROCESSO DE FINALIZA√á√ÉO__________________________________________________________________________________________________________________________
+            driver.Get "https://gdis/gdis-gs-web/despacho/servico/andamento/create?numserv=" & Range("f" & lContador) & "&idDespachanteFiltro=4400"
+            On Error Resume Next '#CHECKPOIT
+            driver.FindElementByXPath("//*[@id='detalhesErroSpan']").Click
+                If Err.Number = "7" Then
+                    On Error GoTo 0 '#CHECKPOIT
+                    On Error Resume Next '#CHECKPOIT
+                    'CARRO_______________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='formFechamento']/div[1]/div/div[2]/div/div[1]/div/div/button").Click
+                    driver.FindElementByXPath("//*[@id='formFechamento']/div[1]/div/div[2]/div/div[1]/div/div/div/div/input").SendKeys Range("B" & lContador)
+                    driver.FindElementByXPath("//*[@id='formFechamento']/div[1]/div/div[2]/div/div[1]/div/div/div/ul").Click
+                    'MARCA√á√ÉO DE VIA VOZ____________________________________________________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='viaVoz1']").Click
+                    sng = Timer
+                    Do While sng + 3 > Timer
+                    Loop
+                    'DESIGNA√á√ÉO_____________________________________________________________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='servicoFTO.dhDesigna']").SendKeys Range("P" & lContador)
+                    driver.FindElementByXPath("//*[@id='btnDesignar']").Click
+                    sng = Timer
+                    Do While sng + 3 > Timer
+                    Loop
+                    'ACIONAMENTO____________________________________________________________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='servicoFTO.dhAciona']").SendKeys Range("R" & lContador)
+                    driver.FindElementByXPath("//*[@id='btnAcionar']/i").Click
+                    sng = Timer
+                    Do While sng + 3 > Timer
+                    Loop
+                    'LOCALIZA√á√ÉO_____________________________________________________________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='servicoFTO.dhLocali']").SendKeys Range("T" & lContador)
+                    driver.FindElementByXPath("//*[@id='btnLocalizar']/i").Click
+                    sng = Timer
+                    Do While sng + 3 > Timer
+                    Loop
+                    'PREVIS√ÉO________________________________________________________________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='servicoFTO.dhTerprev']").SendKeys Range("V" & lContador)
+                    driver.FindElementByXPath("//*[@id='dataAndamentoServico']/div/div[5]/div/dl/dd/div/div/button/i").Click
+                    sng = Timer
+                    Do While sng + 3 > Timer
+                    Loop
+                    'TERMINO REAL________________________________________________________________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='servicoFTO.dhTerreal']").Clear
+                    driver.FindElementByXPath("//*[@id='servicoFTO.dhTerreal']").SendKeys Range("AA" & lContador)
+                    On Error GoTo 0 '#CHECKPOIT
+                    'CODIGO DE FINALIZA√á√ÉO___________________________________________________________________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='findCodFech']").SendKeys Range("X" & lContador)
+                    driver.FindElementByXPath("//*[@id='" & Range("W" & lContador) & "']").Click
+                    'MATERIAL UTILIZADO________________________________________________________________________________________________________________________
+                    On Error Resume Next '#CHECKPOINT
+                    driver.FindElementByXPath("//*[@id='tab-materiais_usados']/a").Click
+                    If Err.Number <> 7 Then
+                        driver.FindElementByXPath("//*[@id='link-show-equipamentos']/i").Click
+                        sng = Timer
+                        Do While sng + 2 > Timer
+                        Loop
+                        'INICIO CONDICIONAL (VERDADEIRO)____________________________________________________________________________________________________________
+                        driver.FindElementByXPath("//*[@id='tblMateriais_filter']/label/input").SendKeys Range("J" & lContador)
+                        'PAGINA DE MATERIAIS UTILIZADOS______________________________________________________________________________________________________________
+                        driver.FindElementByXPath("//*[@id='tblMateriais']/tbody/tr[1]/td[3]/button").Click
+                        '# QUANT USADA (ZEREI, POIS TRATA-SE DE FINALIZA√á√ÉO DE CORTE)
+                        driver.FindElementByXPath("//*[@id='txt-qtdeUsado']").SendKeys 0
+                        '# QUANT RETIRADA (QUANTIDADE INFORMADA NA PLANILHA DO GFORMS)
+                        driver.FindElementByXPath("//*[@id='txt-qtdeRetirado']").SendKeys Range("K" & lContador).Value
+                        '# BOT√ÉO ADICIONAR
+                        driver.FindElementByXPath("//*[@id='btn-adicionar']").Click
+                    End If
+                    On Error GoTo 0 '#CHECKPOINT
+                    'DADOS ADICONAIS_____________________________________________________________________________________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='tab-abaDadosAdicionais']/a").Click
+                    driver.FindElementByXPath("//*[@id='txtObservacao']").SendKeys Range("C" & lContador) & " - " & Range("D" & lContador) & "; " & Range("I" & lContador)
+                    'A√á√ÉO DE FINALIZAR____________________________________________________________________________________________________________________________________________________
+                    driver.FindElementByXPath("//*[@id='btnFinalizar']").Click
+                    Range("G" & lContador) = "FINALIZADA PELO ROBO, " & DateValue(Now) & "."
+                    'FIM CONDICIONAL ___________________________________________________________________________________________________________________________
+                Else
+                    On Error GoTo 0
+                    Range("G" & lContador) = "ERRO NO NUMERO DA OS"
+                End If
+            Else
+                UserForm1.TextBox3 = lContador - 1
+                UserForm1.TextBox5.Text = Format(TimeValue(Now) - HoraAtual, "hh:mm:ss")
+                Range("G" & lContador) = "N√£o finalizado pelo rob√¥, status consultado no GDIS: " & driver.FindElementByXPath("//*[@id='btnSituacaoServico']").Text
+            End If
+        End If
+        'FIM DO CONTADOR (REINICIO)__________________________________________________________________________________________________________________
+        UserForm1.TextBox5.Text = Format(TimeValue(Now) - HoraAtual, "hh:mm:ss")
+        Range("G" & lContador).Select
+    Next lContador
+'MENSAGEM DE FINALIZA√á√ÉO DO PROCESSO__________________________________________________________________________________________________________
 driver.Quit
-
 UserForm1.TextBox5.Text = Format(TimeValue(Now) - HoraAtual, "hh:mm:ss")
-
-MsgBox "O relatÛrio foi concluÌdo em exatos: " & Format(TimeValue(Now) - HoraAtual, "hh:mm:ss") & ". " & Chr(13) & "OSC trabalhando com inteligÍncia.", vbInformation, ""
-
-
+MsgBox "O relat√≥rio foi conclu√≠do em exatos: " & Format(TimeValue(Now) - HoraAtual, "hh:mm:ss") & ". " & Chr(13) & "OSC trabalhando com intelig√™ncia.", vbInformation, ""
 End Sub
